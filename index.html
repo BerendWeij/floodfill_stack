@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title>GD3 floodfill algoritme</title>
+</head>
+<body style="background-color: black;">
+
+<canvas id="canvas" width="400" height="400" style="float:left;"></canvas>
+<script src="setcanvas.js"></script>
+<script src="utils.js"></script>
+<script>
+
+    const stack = [];
+
+    const floodfill = (startX, startY, chosenColor, replaceColor) => {
+
+        stack.push({
+            x: startX,
+            y: startY
+        });
+
+        while (stack.length > 0)
+        {
+            const {x, y} = stack.pop();
+
+            if (getColor(x, y).toString() == chosenColor.toString())
+            {
+                changeColor(x, y, replaceColor);
+
+                stack.push({x: x, y: y + 1});
+                stack.push({x: x, y: y - 1});
+                stack.push({x: x + 1, y: y});
+                stack.push({x: x - 1, y: y});
+            }
+        }
+    };
+
+
+    const onImageClick = event => {
+        const {layerX, layerY} = event;
+        const chosenColor = getColor(layerX, layerY);
+
+        console.time('floodfill');
+        floodfill(layerX, layerY, chosenColor, [Math.floor(Math.random() * 255), 0, 0, 255]);
+        console.timeEnd('floodfill');
+
+    };
+    canvas.addEventListener('click', onImageClick);
+</script>
+</body>
+</html>
